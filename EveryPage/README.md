@@ -1,0 +1,1 @@
+Example of a simple module that executes some code on every single page load
