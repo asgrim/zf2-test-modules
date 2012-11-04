@@ -2,18 +2,17 @@
 
 namespace Eventful\Something;
 
-use Zend\ServiceManager\ServiceManager;
-
-use Zend\ServiceManager\ServiceManagerAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\EventManager\StaticEventManager;
 use Zend\EventManager\Event;
 
-class SomeClass implements ServiceManagerAwareInterface
+class SomeClass implements ServiceLocatorAwareInterface
 {
 	/**
-	 * @var ServiceManager;
+	 * @var ServiceLocatorInterface
 	 */
-	protected $serviceManager;
+	protected $serviceLocator;
 
 	/**
 	 * @var array
@@ -22,14 +21,14 @@ class SomeClass implements ServiceManagerAwareInterface
 
 	/**
 	 * This is *automatically* called by ZF2 because we implement the
-	 * ServiceManagerAwareInterface which allows us to get the eventful_class
+	 * ServiceLocatorAwareInterface which allows us to get the eventful_class
 	 * object in goGoGo function.
 	 *
-	 * @param ServiceManager $sm
+	 * @param ServiceLocatorInterface $sm
 	 */
-	public function setServiceManager(ServiceManager $sm)
+	public function setServiceLocator(ServiceLocatorInterface $sm)
 	{
-		$this->serviceManager = $sm;
+		$this->serviceLocator = $sm;
 		return $this;
 	}
 
@@ -37,16 +36,17 @@ class SomeClass implements ServiceManagerAwareInterface
 	 * Retrieve the service manager
 	 *
 	 * @throws \Exception
-	 * @return ServiceManager
+	 * @return ServiceLocatorInterface
 	 */
-	public function getServiceManager()
+	public function getServiceLocator()
 	{
-		if (!$this->serviceManager)
+		// Probably don't need this, but if we wanted to be super cautious...
+		if (!$this->serviceLocator)
 		{
-			throw new \Exception("Service Manager was not injected?");
+			throw new \Exception("Service Locator was not injected?");
 		}
 
-		return $this->serviceManager;
+		return $this->serviceLocator;
 	}
 
 	/**
@@ -57,7 +57,7 @@ class SomeClass implements ServiceManagerAwareInterface
 	{
 		$this->eventLog = array();
 
-		$eventful = $this->getServiceManager()->get('eventful_class');
+		$eventful = $this->getServiceLocator()->get('eventful_class');
 		/* @var $eventful EventfulClass */
 
 		$callable = array($this, 'somethingFooCallback');
