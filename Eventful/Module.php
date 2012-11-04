@@ -2,10 +2,9 @@
 
 namespace Eventful;
 
-use Zend\Mvc\MvcEvent;
-
 use Eventful\Something\SomeClass;
 
+use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
@@ -13,13 +12,17 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface
 {
 	public function onBootstrap(MvcEvent $e)
 	{
-		$app = $e->getApplication();
-		$sm = $app->getServiceManager();
+		$em = $e->getApplication()->getEventManager();
+		$em->attach(MvcEvent::EVENT_DISPATCH, array($this, 'postDispatch'), -1000);
+	}
 
+	public function postDispatch(MvcEvent $e)
+	{
+		$sm = $e->getApplication()->getServiceManager();
 		$blah = $sm->get('some_class');
-		/* @var $blah SomeClass */
+		$log = $blah->goGoGo();
 
-		$blah->goGoGo();
+		$e->getResult()->setVariable('eventful_log', $log);
 	}
 
 	public function getConfig()

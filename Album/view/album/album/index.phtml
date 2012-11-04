@@ -1,8 +1,7 @@
 <?php
-// module/Album/view/album/album/index.phtml:
-
 $title = 'My albums';
 $this->headTitle($title);
+$this->headScript()->appendFile('lol');
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 <p>
@@ -27,7 +26,7 @@ $this->headTitle($title);
 <?php endforeach; ?>
 </table>
 
-<h2>Extra module stuff...</h2>
+<h2>Test Modules</h2>
 
 <h3>TextStyles</h3>
 <?php echo $this->bold('Some bold text!'); ?><br />
@@ -37,3 +36,28 @@ $this->headTitle($title);
 <?php echo $this->underline('Some underline text!'); ?><br />
 <?php echo $this->u('Some underline text (using alias)!'); ?><br />
 
+<h3>EveryPage</h3>
+<?php
+if (isset($foo))
+{
+	echo "<p>{$foo}</p>";
+}
+else
+{
+	echo "<p>EveryPage did not appear to run...</p>";
+	echo "<p>Try adding <span style=\"font-family: monospace;\">'foo' => \$this->everypage()->getFoo()</span> to the ViewModel in the action...</p>";
+}
+?>
+
+<h3>Eventful Log</h3>
+<?php
+if (is_array($eventful_log))
+{
+	echo "<ol>";
+	foreach($eventful_log as $event)
+	{
+		echo "<li>{$event}</li>";
+	}
+	echo "</ol>";
+}
+?>

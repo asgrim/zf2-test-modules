@@ -15,6 +15,7 @@ class AlbumController extends AbstractActionController
 	{
 		return new ViewModel(array(
             'albums' => $this->getAlbumTable()->fetchAll(),
+			'foo' => $this->everypage()->getFoo(),
         ));
 	}
 

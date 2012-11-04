@@ -16,6 +16,11 @@ class SomeClass implements ServiceManagerAwareInterface
 	protected $serviceManager;
 
 	/**
+	 * @var array
+	 */
+	protected $eventLog;
+
+	/**
 	 * This is *automatically* called by ZF2 because we implement the
 	 * ServiceManagerAwareInterface which allows us to get the eventful_class
 	 * object in goGoGo function.
@@ -46,9 +51,12 @@ class SomeClass implements ServiceManagerAwareInterface
 
 	/**
 	 * Create our eventful object and attach ourselves to a couple of it's events
+	 * @return array
 	 */
 	public function goGoGo()
 	{
+		$this->eventLog = array();
+
 		$eventful = $this->getServiceManager()->get('eventful_class');
 		/* @var $eventful EventfulClass */
 
@@ -85,6 +93,8 @@ class SomeClass implements ServiceManagerAwareInterface
 		$eventful->first('bar');
 		$eventful->second('omg');
 		$eventful->third('cute ewoks');
+
+		return $this->eventLog;
 	}
 
 	/**
@@ -93,6 +103,6 @@ class SomeClass implements ServiceManagerAwareInterface
 	 */
 	public function somethingFooCallback(Event $e)
 	{
-		printf("<em>%s</em>: <strong>%s</strong> called in target <strong>%s</strong> with params <strong>%s</strong><br />", get_class($e), $e->getName(), get_class($e->getTarget()), json_encode($e->getParams()));
+		$this->eventLog[] = sprintf("<em>%s</em>: <strong>%s</strong> called in target <strong>%s</strong> with params <strong>%s</strong><br />", get_class($e), $e->getName(), get_class($e->getTarget()), json_encode($e->getParams()));
 	}
 }

@@ -2,14 +2,39 @@
 
 namespace EveryPage\Controller\Plugin;
 
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 
-class EveryPage extends AbstractPlugin
+class EveryPage extends AbstractPlugin implements ServiceLocatorAwareInterface
 {
-	public function __invoke()
+	protected $foo;
+
+	protected $serviceLocator;
+
+	public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
 	{
-		echo "If you see this, the EveryPage controller plugin ran...";
-		// @todo How can I put stuff in the view from here?
-		// @todo If I access the controller (using $this->getController()) it's not the right instance
+		$this->serviceLocator = $serviceLocator;
+		return $this;
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see Zend\ServiceManager.ServiceLocatorAwareInterface::getServiceLocator()
+	 * @return Zend\Mvc\Controller\PluginManager
+	 */
+	public function getServiceLocator()
+	{
+		return $this->serviceLocator;
+	}
+
+	public function __construct()
+	{
+		$this->foo = "If you see this, EveryPage ran!";
+	}
+
+	public function getFoo()
+	{
+		return $this->foo;
 	}
 }
