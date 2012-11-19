@@ -2,6 +2,7 @@
 
 namespace Album\Controller;
 
+use Album\Model\AlbumTable;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Album\Model\Album;
@@ -13,8 +14,11 @@ class AlbumController extends AbstractActionController
 
 	public function indexAction()
 	{
+		$from = new \DateTime("2012-11-01");
+		$to = new \DateTime("2012-11-03");
+
 		return new ViewModel(array(
-            'albums' => $this->getAlbumTable()->fetchAll(),
+            'albums' => $this->getAlbumTable()->fetchAlbumsForSaleWithReleaseDatesBetween($from, $to),
 			'foo' => $this->everypage()->getFoo(),
         ));
 	}
@@ -100,6 +104,9 @@ class AlbumController extends AbstractActionController
 		);
 	}
 
+	/**
+	 * @return AlbumTable
+	 */
 	public function getAlbumTable()
 	{
 		if (!$this->albumTable) {

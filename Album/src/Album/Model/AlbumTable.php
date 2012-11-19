@@ -2,6 +2,8 @@
 
 namespace Album\Model;
 
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\TableGateway;
 
 class AlbumTable
@@ -16,6 +18,31 @@ class AlbumTable
 	public function fetchAll()
 	{
 		$resultSet = $this->tableGateway->select();
+		return $resultSet;
+	}
+
+	public function fetchAlbumsForSale()
+	{
+		$resultSet = $this->tableGateway->select(function (Select $select) {
+			$select->where('for_sale', 1);
+		});
+		return $resultSet;
+	}
+
+	/**
+	 * @param \DateTime $from
+	 * @param \DateTime $to
+	 * @return ResultSet
+	 */
+	public function fetchAlbumsForSaleWithReleaseDatesBetween(\DateTime $from, \DateTime $to)
+	{
+		$sfrom = $from->format("Y-m-d H:i:s");
+		$sto = $to->format("Y-m-d H:i:s");
+
+		$resultSet = $this->tableGateway->select(function (Select $select) use($sfrom, $sto) {
+			$select->where->between('release_date', $sfrom, $sto);
+			$select->where('for_sale', 1);
+		});
 		return $resultSet;
 	}
 
