@@ -2,8 +2,6 @@
 
 namespace Album\Controller;
 
-use ZendOpenId\Consumer\GenericConsumer as Consumer;
-
 use Album\Model\AlbumTable;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -16,25 +14,6 @@ class AlbumController extends AbstractActionController
 
 	public function indexAction()
 	{
-		$id = "http://openid.asgrim.com/";
-
-        $query = $this->params()->fromQuery();
-
-        $consumer = new Consumer(null);
-
-        if ($query['openid_mode'])
-        {
-        	if (!$consumer->verify($query))
-        	{
-        		$msg = $consumer->getError();
-        		die("Unauthorised openid... " . $msg);
-        	}
-        }
-        else
-        {
-        	$consumer->login($id);
-        }
-
 		$from = new \DateTime("2012-11-01");
 		$to = new \DateTime("2012-11-03");
 

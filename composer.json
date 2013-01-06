@@ -14,7 +14,6 @@
     "homepage": "http://framework.zend.com/",
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": "2.*",
-		"zendframework/zendopenid": "2.0.*@dev"
+        "zendframework/zendframework": "2.*"
     }
 }
